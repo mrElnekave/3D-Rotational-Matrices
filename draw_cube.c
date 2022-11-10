@@ -10,6 +10,7 @@
 #define TERMINAL_HEIGHT 50
 
 char screen_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
+float z_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
 
 int screen_width = TERMINAL_WIDTH;
 int screen_height = TERMINAL_HEIGHT;
@@ -47,6 +48,21 @@ void draw_buffer() {
     }
 }
 
+
+// Final zbuffer logic
+// zbuffer is a 2d array of floats
+// it holds the point closest to the camera for each pixel
+// if the point is closer to the camera than the point in the zbuffer
+// then the point is drawn onto the screen_buffer
+
+void final_zbuffer_logic(char c, float z_val, int x, int y) {
+    if (y >= 0 && y < screen_height && x >= 0 && x < screen_width) {
+        if (z_val > z_buffer[y][x]) {
+            z_buffer[y][x] = z_val;
+            screen_buffer[y][x] = c;
+        }
+    }
+}
 
 int main() {
     int counter = 0; 
