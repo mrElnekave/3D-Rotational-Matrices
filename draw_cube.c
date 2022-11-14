@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <Windows.h>
+#include <math.h>
 
 
 
 // My terminal width is 160 characters
 // and I want 50 characters of height
 
-#define TERMINAL_WIDTH 160
-#define TERMINAL_HEIGHT 50
+#define TERMINAL_WIDTH 159
+#define TERMINAL_HEIGHT 30
 
 char screen_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
-float z_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
+// float z_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
 
 int screen_width = TERMINAL_WIDTH;
 int screen_height = TERMINAL_HEIGHT;
@@ -50,26 +51,56 @@ void draw_buffer() {
 
 
 // Final zbuffer logic
-// zbuffer is a 2d array of floats
-// it holds the point closest to the camera for each pixel
-// if the point is closer to the camera than the point in the zbuffer
-// then the point is drawn onto the screen_buffer
+// // zbuffer is a 2d array of floats
+// // it holds the point closest to the camera for each pixel
+// // if the point is closer to the camera than the point in the zbuffer
+// // then the point is drawn onto the screen_buffer
+// void final_zbuffer_logic(char c, float z_val, int x, int y) {
+//     if (y >= 0 && y < screen_height && x >= 0 && x < screen_width) {
+//         if (z_val > z_buffer[y][x]) {
+//             z_buffer[y][x] = z_val;
+//             screen_buffer[y][x] = c;
+//         }
+//     }
+// }
 
-void final_zbuffer_logic(char c, float z_val, int x, int y) {
-    if (y >= 0 && y < screen_height && x >= 0 && x < screen_width) {
-        if (z_val > z_buffer[y][x]) {
-            z_buffer[y][x] = z_val;
-            screen_buffer[y][x] = c;
+
+// make the simple cube spin using 2d rotational matrix
+/**
+ * @brief will rotate the cube with a 2d rotational matrix
+ * 
+ * @param center_x x coord of center of the cube
+ * @param center_y y coord of center of the cube
+ * @param width  width of the cube
+ * @param height height of the cube
+ * @param cube character to draw the cube with
+ * @param angle angle to rotate the cube by
+ */
+void place_cube_in_buffer_rotation(int center_x, int center_y, int width, int height, char cube, float angle) {
+    for (int x = -width; x < width; x++) {
+        for (int y = -height; y < height; y++) {
+            // rotate the point
+            float x_rotated = x * cos(angle) - y * sin(angle);
+            float y_rotated = x * sin(angle) + y * cos(angle);
+
+            // translate the point back
+            int x_translated = x_rotated + center_x;
+            int y_translated = y_rotated + center_y;
+
+            // draw the point
+            screen_buffer[y_translated][x_translated] = cube;
         }
     }
 }
 
+
 int main() {
-    int counter = 0; 
+    float angle = 0.0f;
+    float increment = 0.1f;
     while (1) {
         // calculate cube
         set_buffer_background('.');
-        place_cube_in_buffer(counter++, 10, 10, 10, '#');
+        place_cube_in_buffer_rotation(50, 15, 10, 10, '#', angle);
 
         // draw cube
         clear_screen();
@@ -78,5 +109,6 @@ int main() {
 
         // sleep
         Sleep(500);
+        angle += increment;
     }
 }
