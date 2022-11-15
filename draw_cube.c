@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <Windows.h>
+#define _USE_MATH_DEFINES // This is required to get M_PI
 #include <math.h>
-#include <corecrt_math_defines.h> // for M_PI
 
 
 // My terminal width is 160 characters
@@ -33,6 +33,7 @@ void set_buffer_background(char background) {
 }
 void draw_buffer() {
     for (int i = 0; i < screen_height; i++) {
+        screen_buffer[i][screen_width - 1] = '|';
         for (int j = 0; j < screen_width; j++) {
             putchar(screen_buffer[i][j]);
         }
@@ -47,54 +48,75 @@ void draw_buffer() {
 // // if the point is closer to the camera than the point in the zbuffer
 // // then the point is drawn onto the screen_buffer
 void final_zbuffer_logic(char c, float z_val, int x, int y) {
+    // printf("Should've drawn x: %d, y: %d, z: %f\n", x, y, z_val);
+
     if (y >= 0 && y < screen_height && x >= 0 && x < screen_width) {
         if (z_val > z_buffer[y][x]) {
+
             z_buffer[y][x] = z_val;
             screen_buffer[y][x] = c;
         }
     }
 }
 
+void clear_zbuffer() {
+    memset(z_buffer, 0, screen_width * screen_height * sizeof(float)); // Won't ever draw negative points
+}
 
-// // make the simple cube spin using 2d rotational matrix
-// /**
-//  * @brief will rotate the cube with a 2d rotational matrix
-//  * 
-//  * @param center_x x coord of center of the cube
-//  * @param center_y y coord of center of the cube
-//  * @param width  width of the cube
-//  * @param height height of the cube
-//  * @param cube character to draw the cube with
-//  * @param angle angle to rotate the cube by
-//  */
-// void place_cube_in_buffer_rotation(int center_x, int center_y, int width, int height, char cube, float angle) {
-//     for (float x = -width; x < width; x+=.5f) {
-//         for (float y = -height; y < height; y+=.5f) {
-//             // rotate the point
-//             float x_rotated = x * cos(angle) - y * sin(angle);
-//             float y_rotated = x * sin(angle) + y * cos(angle);
-
-//             // translate the point back
-//             int x_translated = x_rotated + center_x;
-//             int y_translated = y_rotated + center_y;
-
-//             // draw the point
-//             screen_buffer[y_translated][x_translated] = cube;
-//         }
-//     }
-// }
 
 // Make a 3d rotational cube
+struct POINT3D {
+    float x;
+    float y;
+    float z;
+};
+
+// Rotation with Euler matrices happens in three steps. Z rotation (twist) (psi), then Y rotation (lean) (theta), then Z rotation (swing) (phi).
+/**
+ * @brief will rotate the cube with a 3d rotational matrix
+ * 
+ * @param point The point to rotate
+ * @param psi The angle to rotate around the z axis (twist)
+ * @param theta The angle to rotate around the y axis (lean)
+ * @param phi The angle to rotate around the z axis (swing)
+ * @return struct POINT3D The rotated point
+ */
+struct POINT3D rotate_point(struct POINT3D point, float psi, float theta, float phi) {
+    struct POINT3D point_rotated;
+    point_rotated.x = cos(theta) * point.x + sin(theta) * sin(psi) * point.y + sin(theta) * cos(psi) * point.z;
+    point_rotated.y = sin(theta) * sin(phi) * point.x + (cos(psi) * cos(phi) - cos(theta) * sin(psi) * sin(phi)) * point.y + (-cos(phi)*sin(psi) - cos(theta)*cos(psi)*cos(phi)) * point.z;
+    point_rotated.z = -sin(theta) * cos(phi) * point.x + (cos(psi) * sin(phi) + cos(theta) * cos(phi) * sin(psi)) * point.y + (-sin(psi) * sin(phi) + cos(theta) * cos(psi) * cos(phi)) * point.z;
+    
+    return point_rotated;
+}
 
 
+void place_cube_in_z_buffer_rotation(struct POINT3D center, int width, float psi, float theta, float phi) {
+    
+    for (float i = -width; i < width; i+=.5) {
+        for (float j = -width; j < width; j+=.5) {
+            // Only top face
+            struct POINT3D point = {i, j, width};
+            // printf("Should've drawn x: %d, y: %d, z: %f\n", i, j, width);
+
+            struct POINT3D new_point = rotate_point(point, psi, theta, phi);
+            new_point.x += center.x;
+            new_point.y += center.y;
+            new_point.z += center.z;
+            final_zbuffer_logic('X', new_point.z, new_point.x, new_point.y);
+        }
+    }
+}
 
 int main() {
-    float angle = 0.0f;
+    float psi = 0, theta = 0, phi = 0;
     float increment = M_PI / 32 ;
+    struct POINT3D center = {screen_width / 2, screen_height / 2, 100};
+    clear_zbuffer();
     while (1) {
         // calculate cube
         set_buffer_background('.');
-        place_cube_in_buffer_rotation(50, 15, 10, 10, '#', angle);
+        place_cube_in_z_buffer_rotation(center, 10, psi, theta, phi);
 
         // draw cube
         clear_screen();
@@ -102,7 +124,10 @@ int main() {
         draw_buffer();
 
         // sleep
-        Sleep(125);
-        angle += increment;
+        psi += increment;
+        // theta += increment * 2;
+        // phi += increment * 3;
+        Sleep(500);
+
     }
 }
