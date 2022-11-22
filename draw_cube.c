@@ -96,7 +96,7 @@ void place_cube_in_z_buffer_rotation(struct POINT3D center, int width, float psi
     for (float i = -width; i < width; i+=.5) {
         for (float j = -width; j < width; j+=.5) {
             // Only top face
-            struct POINT3D point = {i, j, width};
+            struct POINT3D point = {i, j, (float) width};
             // printf("Should've drawn x: %d, y: %d, z: %f\n", i, j, width);
 
             struct POINT3D new_point = rotate_point(point, psi, theta, phi);
@@ -111,7 +111,7 @@ void place_cube_in_z_buffer_rotation(struct POINT3D center, int width, float psi
 int main() {
     float psi = 0, theta = 0, phi = 0;
     float increment = M_PI / 32 ;
-    struct POINT3D center = {screen_width / 2, screen_height / 2, 100};
+    struct POINT3D center = {(float) (screen_width / 2), (float) (screen_height / 2), 100};
     clear_zbuffer();
     while (1) {
         // calculate cube
@@ -124,8 +124,8 @@ int main() {
         draw_buffer();
 
         // sleep
-        psi += increment;
-        // theta += increment * 2;
+        // psi += increment;
+        theta += increment * 2;
         // phi += increment * 3;
         Sleep(500);
 
