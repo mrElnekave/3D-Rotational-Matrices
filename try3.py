@@ -11,7 +11,7 @@ depth = 50
 
 center = rb.Vector(0, 0)
 
-point = (30, 0, 0)
+point = (0, 30, 0)
 roll = 0 # spin around x-axis counter-clockwise (on screen its another up-down motion)
 pitch = 0 # spin around z-axis
 yaw = 0 # spin around y-axis counter-clockwise rotation (on screen it looks like ur just moving up)
@@ -71,26 +71,14 @@ def draw_circle_z():
         pos = rb.Vector(x, y)
         pos += center
         if first:
-            rb.Draw.queue_circle(pos, 2, rb.Color.red)
+            rb.Draw.queue_circle(pos, 2, rb.Color.red, fill=rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250))))
             first = False
         rb.Draw.queue_pixel(pos, color=rb.Color.red, z_index=int(z))
 
-def custom_draw():  
-    first = True
-    for c_point in circle_z_plane:
-
-        x, y, z = c_point
-        x = get_x(x, y, z, 0, pitch, 0)
-        y = get_y(x, y, z, 0, pitch, 0)
-        z = get_z(x, y, z, 0, pitch, 0)
-        pos = rb.Vector(x, y)
-        pos += center
-        if first:
-            rb.Draw.queue_circle(pos, 2, rb.Color.red)
-            first = False
-        rb.Draw.queue_pixel(pos, color=rb.Color.red, z_index=int(z))
+def draw_circle_x():
     first = True
     for c_point in circle_x_plane:
+
         x, y, z = c_point
         x = get_x(x, y, z, roll, pitch, yaw)
         y = get_y(x, y, z, roll, pitch, yaw)
@@ -98,11 +86,14 @@ def custom_draw():
         pos = rb.Vector(x, y)
         pos += center
         if first:
-            rb.Draw.queue_circle(pos, 2, rb.Color.green)
+            rb.Draw.queue_circle(pos, 2, rb.Color.green, fill=rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250))))
             first = False
         rb.Draw.queue_pixel(pos, color=rb.Color.green, z_index=int(z))
+
+def draw_circle_y():
     first = True
     for c_point in circle_y_plane:
+
         x, y, z = c_point
         x = get_x(x, y, z, 0, pitch, yaw)
         y = get_y(x, y, z, 0, pitch, yaw)
@@ -110,9 +101,14 @@ def custom_draw():
         pos = rb.Vector(x, y)
         pos += center
         if first:
-            rb.Draw.queue_circle(pos, 2, rb.Color.blue)
+            rb.Draw.queue_circle(pos, 2, rb.Color.blue, fill=rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250))))
             first = False
         rb.Draw.queue_pixel(pos, color=rb.Color.blue, z_index=int(z))
+
+def custom_draw():  
+    draw_circle_z()
+    draw_circle_x()
+    draw_circle_y()
 
     rb.Draw.queue_circle(center, radius=2, border=None, fill=rb.Color(0, 0, 255), z_index=0)
     x = get_x(*point, roll, pitch, yaw)
@@ -141,8 +137,8 @@ def custom_update():
 
 scene.update = custom_update
 
-rb.begin()
-
+# rb.begin()
+pitch = pi
 # print("Get x: ", get_x(-1, 2, 3, 0, 0, pi / 2))
 # print("Get y: ", get_y(-1, 2, 3, 0, 0, pi / 2))
 # print("Get z: ", get_z(-1, 2, 3, 0, 0, pi / 2))
