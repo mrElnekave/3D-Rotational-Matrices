@@ -1,20 +1,38 @@
 
 
+# R_z = [
+#     ["1", "0", "0"],
+#     ["0", "cos(psi)", "-sin(psi)"],
+#     ["0", "sin(psi)", "cos(psi)"]
+#     ]
+
+# R_y = [
+#     ["cos(theta)", "0", "sin(theta)"],
+#     ["0", "1", "0"],
+#     ["-sin(theta)", "0", "cos(theta)"]
+# ]
+
+# R_x = [
+#     ["cos(phi)", "-sin(phi)", "0"],
+#     ["sin(phi)", "cos(phi)", "0"],
+#     ["0", "0", "1"]
+# ]
+
 R_z = [
     ["1", "0", "0"],
-    ["0", "cos(psi)", "-sin(psi)"],
-    ["0", "sin(psi)", "cos(psi)"]
+    ["0", "cos(roll)", "-sin(roll)"],
+    ["0", "sin(roll)", "cos(roll)"]
     ]
 
 R_y = [
-    ["cos(theta)", "0", "sin(theta)"],
+    ["cos(yaw)", "0", "sin(yaw)"],
     ["0", "1", "0"],
-    ["-sin(theta)", "0", "cos(theta)"]
+    ["-sin(yaw)", "0", "cos(yaw)"]
 ]
 
 R_x = [
-    ["cos(phi)", "-sin(phi)", "0"],
-    ["sin(phi)", "cos(phi)", "0"],
+    ["cos(pitch)", "-sin(pitch)", "0"],
+    ["sin(pitch)", "cos(pitch)", "0"],
     ["0", "0", "1"]
 ]
 
@@ -25,7 +43,7 @@ POINTS = [
 ]
 
 def matrix_multiply(A, B, final = False):
-    C = [["" for j in range(len(B[0]))] for i in range(len(A))]
+    C = [["" for col_size in range(len(B[0]))] for row_size in range(len(A))]
     for i in range(len(A)):
         for j in range(len(B[0])):
             for k in range(len(B)):
@@ -45,7 +63,7 @@ def matrix_multiply(A, B, final = False):
     return C
 
 # in rubato we would need to do Y then Z then Y to get the same result
-R_all = matrix_multiply(matrix_multiply(R_y, R_z), R_y)
+R_all = matrix_multiply(matrix_multiply(R_x, R_y), R_z)
 New_points = matrix_multiply(R_all, POINTS, final = True)
 
 for i in range(len(New_points)):
@@ -55,3 +73,6 @@ for i in range(len(New_points)):
 
 for row in New_points:
     print(row[0])
+
+# for row in R_all:
+#     print(row)

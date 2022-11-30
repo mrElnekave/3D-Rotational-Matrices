@@ -15,17 +15,17 @@ def get_x(x, y, z, psi, theta, phi):
     #         (cos(theta) * sin(theta) + sin(theta) * cos(psi) * cos(theta)) * z
 
 def get_y(x, y, z, psi, theta, phi):
-    return -sin(psi) * -sin(theta) * x  +  \
-        (cos(psi) * cos(psi) + -sin(psi) * cos(theta) * sin(psi)) * y  +  \
-            (cos(psi) * -sin(psi) + -sin(psi) * cos(theta) * cos(psi)) * z
+    return sin(theta) * sin(phi) * x  +  \
+        (cos(psi) * cos(phi) + cos(theta) * sin(psi) * sin(phi)) * y  +  \
+            (-cos(phi) * sin(psi) + -cos(theta) * cos(psi) * sin(phi)) * z
     # return -sin(psi) * -sin(theta) * x  +  \
     #     (cos(psi)) * y  +  \
     #         (-sin(psi) * cos(theta)) * z
 
 def get_z(x, y, z, psi, theta, phi):
-    return cos(psi) * -sin(theta) * x  +  \
-        (sin(psi) * cos(psi) + cos(psi) * cos(theta) * sin(psi)) * y  +  \
-            (sin(psi) * -sin(psi) + cos(psi) * cos(theta) * cos(psi)) * z  
+    return -sin(theta) * cos(phi) * x  +  \
+        (cos(psi) * sin(phi) + cos(theta) * cos(phi) * sin(psi)) * y  +  \
+            (-sin(psi) * sin(phi) + cos(theta) * cos(psi) * cos(phi)) * z  
     # return -sin(theta) * cos(theta) + cos(theta) * cos(psi) * -sin(theta) * x  +  \
     #     (cos(theta) * sin(psi)) * y  +  \
     #         (-sin(theta) * sin(theta) + cos(theta) * cos(psi) * cos(theta)) * z
@@ -68,9 +68,10 @@ def custom_draw():
             # I have to calculate for front of cube
 
             # since y-axis is up, x-axis is right, and z-axis is out of screen
-            x = calculate_X(x, y, depth, psi, theta, phi)
-            y = calculate_Y(x, y, depth, psi, theta, phi)
-            z = calculate_Z(x, y, depth, psi, theta, phi)
+            x = get_x(x, y, depth, psi, theta, phi)
+            y = get_y(x, y, depth, psi, theta, phi)
+            z = get_z(x, y, depth, psi, theta, phi)
+
             rb.Draw.queue_rect(rb.Vector(x, y),1,1, rb.Color.cyan, z_index=int(z))
 
             # and back of cube
@@ -88,7 +89,7 @@ scene.draw = custom_draw
 def custom_update():
     global psi, theta, phi
     if rb.Input.key_pressed("space"):
-        phi += 0.01
+        theta += 0.01
 
 scene.update = custom_update
 
