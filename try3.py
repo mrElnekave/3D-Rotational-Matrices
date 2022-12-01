@@ -30,6 +30,8 @@ def get_y(x, y, z, roll, pitch, yaw):
 def get_z(x, y, z, roll, pitch, yaw):
     return -sin(yaw) * x  +  (cos(yaw) * sin(roll)) * y  +  (cos(yaw) * cos(roll)) * z
 
+def get_xyz(x, y, z, roll, pitch, yaw):
+    return get_x(x, y, z, roll, pitch, yaw), get_y(x, y, z, roll, pitch, yaw), get_z(x, y, z, roll, pitch, yaw)
 
 # gimbal circles
 circle_z_plane: list[tuple] = []
@@ -59,20 +61,15 @@ points = [(0, 30, 0), (0, -30, 0), (30, 0, 0), (-30, 0, 0), (0, 0, 30), (0, 0, -
 def draw_circle_z():
     first = True
     for c_point in circle_z_plane:
-
-        x, y, z = c_point
-        x = get_x(x, y, z, 0, pitch, 0)
-        y = get_y(x, y, z, 0, pitch, 0)
-        z = get_z(x, y, z, 0, pitch, 0)
+        x, y, z = get_xyz(*c_point, roll, pitch, yaw)
         pos = rb.Vector(x, y)
-        pos += center
         if first:
             rb.Draw.queue_circle(pos, 2, rb.Color.red, fill=rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250))))
             first = False
         rb.Draw.queue_pixel(pos, color=rb.Color.red, z_index=int(z))
 
 def custom_draw():  
-    # draw_circle_z()
+    draw_circle_z()
     for point in points:
         rb.Draw.queue_circle(center, radius=2, border=None, fill=rb.Color(0, 0, 255), z_index=0)
         x = get_x(*point, roll, pitch, yaw)
