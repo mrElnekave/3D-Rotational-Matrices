@@ -1,5 +1,6 @@
 import rubato as rb
 from math import cos, sin, pi
+from copy import copy
 
 rb.init(res=(300, 300), maximize=True)
 
@@ -12,7 +13,7 @@ depth = 50
 center = rb.Vector(0, 0)
 
 point = (0, 30, 0)
-roll = 0 # spin around x-axis counter-clockwise (on screen its another up-down motion)
+roll = pi/3 # spin around x-axis counter-clockwise (on screen its another up-down motion)
 pitch = 0 # spin around z-axis
 yaw = 0 # spin around y-axis counter-clockwise rotation (on screen it looks like ur just moving up)
 
@@ -54,13 +55,38 @@ def circle(xc, yc, radius, cicle_list):
                 x -= 1
                 err -= 2 * x + 1
 circle_z_plane = []
+circle_x_plane = []
+circle_y_plane = []
 
-circle(0, 0, 30, circle_z_plane)
+circle(0, 0, 40, circle_z_plane)
+for point in circle_z_plane:
+    x, y, _ = copy(point)
+    circle_x_plane.append((0, x, y))
+    x, y, _ = copy(point)
+    circle_y_plane.append((x, 0, y))
 
 points = [(0, 30, 0), (0, -30, 0), (30, 0, 0), (-30, 0, 0), (0, 0, 30), (0, 0, -30)]
 def draw_circle_z():
     first = True
     for c_point in circle_z_plane:
+        x, y, z = get_xyz(*c_point, 0, pitch, 0)
+        pos = rb.Vector(x, y)
+        if first:
+            rb.Draw.queue_circle(pos, 2, rb.Color.blue, fill=rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250))))
+            first = False
+        rb.Draw.queue_pixel(pos, color=rb.Color.blue, z_index=int(z))
+def draw_circle_y():
+    first = True
+    for c_point in circle_y_plane:
+        x, y, z = get_xyz(*c_point, 0, pitch, yaw)
+        pos = rb.Vector(x, y)
+        if first:
+            rb.Draw.queue_circle(pos, 2, rb.Color.green, fill=rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250))))
+            first = False
+        rb.Draw.queue_pixel(pos, color=rb.Color.green, z_index=int(z))
+def draw_circle_x():
+    first = True
+    for c_point in circle_y_plane:
         x, y, z = get_xyz(*c_point, roll, pitch, yaw)
         pos = rb.Vector(x, y)
         if first:
@@ -70,6 +96,8 @@ def draw_circle_z():
 
 def custom_draw():  
     draw_circle_z()
+    draw_circle_y()
+    draw_circle_x()
     for point in points:
         rb.Draw.queue_circle(center, radius=2, border=None, fill=rb.Color(0, 0, 255), z_index=0)
         x = get_x(*point, roll, pitch, yaw)
