@@ -1,6 +1,4 @@
 import rubato as rb
-from math import cos, sin, pi
-from copy import copy
 from rotation_kachow import get_xyz
 rb.init(res=(300, 300), maximize=True)
 
