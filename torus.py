@@ -23,19 +23,21 @@ scene = rb.Scene()
 torus = []
 
 def gen_torus():
-    a = 10
-    c = 15
-    for v in range(0, 360, 10):
-        for u in range(0, 360, 2):
-            x = (c + a * cos(v)) * cos(u)
-            y = (c + a * cos(v)) * sin(u)
-            z = a * sin(v)
+    a = 50   # a is the radius of the tube
+    c = 80   # c is the radius of the torus
+    for v in range(0, 360, 10):  # goes around the tube
+        for u in range(0, 360, 4):  # goes around the torus
+            v_ = v * pi / 180
+            u_ = u * pi / 180
+            x = (c + a * cos(v_)) * cos(u_)
+            y = (c + a * cos(v_)) * sin(u_)
+            z = a * sin(v_)
             torus.append((x, y, z))
 gen_torus()
 def custom_draw():  
     for point in torus:
         x, y, z = get_xyz(*point, roll, pitch, yaw)
-        rb.Draw.queue_rect(rb.Vector(x, y) * 4, 6, 6, fill=rb.Color.blue, z_index=int(z * 4), border=None)
+        rb.Draw.queue_rect(rb.Vector(x, y), 6, 6, fill=rb.Color.blue, z_index=int(z), border=None)
 
 
 scene.draw = custom_draw
