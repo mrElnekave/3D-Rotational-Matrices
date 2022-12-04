@@ -6,8 +6,8 @@ from math import cos, sin, pi
 
 
 # target 54 * 54
-a = 20 # a is the radius of the tube
-c = 26 # c is the radius of the torus
+a = 10 # a is the radius of the tube
+c = 15 # c is the radius of the torus
 
 rb.init(res=[(a+c)*2*10]*2, maximize=True)
 
@@ -28,29 +28,27 @@ class SurfaceZ(rb.Surface):
             super().set_pixel(pos, color, blending)
     
 
-roll = 0 # spin around x-axis counter-clockwise (on screen its another up-down motion)
+roll = pi/5 # spin around x-axis counter-clockwise (on screen its another up-down motion)
 pitch = 0 # spin around z-axis
 yaw = 0 # spin around y-axis counter-clockwise rotation (on screen it looks like ur just moving up)
 
 
 # define rotation functions
 
-torus = []
+quarter_torus = []
 
 def gen_torus():
-
-    for v in range(0, 360, 1):  # goes around the tube
-        for u in range(0, 360, 1):  # goes around the torus
+    for v in range(0, 360, 4):  # goes around the tube interval of 3 if you want it to be w/out holes
+        for u in range(0, 360, 2):  # goes around the torus
             v_ = v * pi / 180
             u_ = u * pi / 180
             x = (c + a * cos(v_)) * cos(u_)
             y = (c + a * cos(v_)) * sin(u_)
             z = a * sin(v_)
-            torus.append((x, y, z))
+            quarter_torus.append((x, y, z))
 gen_torus()
 
 surf = SurfaceZ((a + c) * 2, (a + c) * 2, (10, 10))
-
 
 def custom_draw():  
     global roll, pitch, yaw
@@ -59,11 +57,14 @@ def custom_draw():
     surf.reset_zbuffer()
     surf.fill(rb.Color.night)
 
-    for point in torus:
+    for point in quarter_torus:
         x, y, z = get_xyz(*point, roll, pitch, yaw)
-        x, y, z = int(x), int(y), int(z)
+        _x, _y, _z = int(x), int(y), int(z)
         color = rb.Color.mix(rb.Color.yellow, rb.Color.red, rb.Math.map(z, -a-c, a+c, 0, 1), "linear")
-        surf.set_pixel((x, y), color, z=z, blending=False)
+        surf.set_pixel((_x, _y), color, z=_z, blending=False)
+
+
+            
     rb.Draw.surface(surf)
 
 
