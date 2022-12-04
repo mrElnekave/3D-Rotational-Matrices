@@ -112,4 +112,29 @@ scene.update = custom_update
 scene.add_ui(text_go)
 
 
-rb.begin()
+# rb.begin()
+
+# float x, y, z, _x;
+#     y = 0;
+#     z = 0;
+#     for (x = -width; x < width; x+=.5) {
+#         for (y = -width; y < width; y+=.5) {
+#             _x = cos(psi) * cos(theta) * cos(phi) + -sin(psi) * sin(phi) * x  +  (cos(psi) * cos(theta) * -sin(phi) + -sin(psi) * cos(phi)) * y  +  (cos(psi) * sin(theta)) * z;
+#             printf("x: %f, becomes %f\n", x, _x);
+#         }
+#     }
+
+for x in range(-10, 10):
+    for y in range(-10, 10):
+
+        print(f"x {x} becomes {get_xyz(x, y, 10, roll, pitch, yaw)[0]}")
+
+from math import cos, sin
+psi, theta, phi = 0, 0, 0
+x, y, z = 2, 2, 3
+print(cos(psi) * cos(theta) * cos(phi) + -sin(psi) * sin(phi) * x  +  (cos(psi) * cos(theta) * -sin(phi) + -sin(psi) * cos(phi)) * y  +  (cos(psi) * sin(theta)) * z)
+
+
+x = (cos(theta) * x + sin(theta) * sin(psi) * y + sin(theta) * cos(psi) * z)
+y = ((sin(theta) * sin(phi) *x + (cos(psi) * cos(phi) - cos(theta) * sin(psi) * sin(phi)) * y + (cos(psi) * sin(phi) + cos(theta) * cos(phi) * sin(psi)) * z))
+z = (-sin(theta) * cos(phi) * x + (cos(psi) * sin(phi) + cos(theta) * cos(phi) * sin(psi)) * y + (-sin(psi) * sin(phi) + cos(theta) * cos(psi) * cos(phi)) * z)

@@ -3,6 +3,10 @@
 #define _USE_MATH_DEFINES // This is required to get M_PI
 #include <math.h>
 
+
+// My terminal width is 160 characters
+// and I want 50 characters of height
+
 #define TERMINAL_WIDTH 159
 #define TERMINAL_HEIGHT 30
 
@@ -12,13 +16,8 @@ float z_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
 int screen_width = TERMINAL_WIDTH;
 int screen_height = TERMINAL_HEIGHT;
 
-// Make a 3d rotational cube
-struct POINT3D {
-    int x;
-    int y;
-    int z;
-};
 
+// ---------------------------------------- Works fine ----------------------------------------
 void clear_screen() {
     printf("\x1b[2J"); // found this clears screen for most op systems
 
@@ -44,75 +43,113 @@ void draw_buffer() {
 }
 
 
+// Final zbuffer logic
+// // zbuffer is a 2d array of floats
+// // it holds the point closest to the camera for each pixel
+// // if the point is closer to the camera than the point in the zbuffer
+// // then the point is drawn onto the screen_buffer
+void final_zbuffer_logic(char c, float z_val, int x, int y) {
+    // printf("Should've drawn x: %d, y: %d, z: %f\n", x, y, z_val);
 
-// // Rotation with Euler matrices happens in three steps. Z rotation (twist) (psi), then Y rotation (lean) (theta), then Z rotation (swing) (phi).
-// /**
-//  * @brief will rotate the cube with a 3d rotational matrix
-//  * 
-//  * @param point The point to rotate
-//  * @param psi The angle to rotate around the z axis (twist)
-//  * @param theta The angle to rotate around the y axis (lean)
-//  * @param phi The angle to rotate around the z axis (swing)
-//  * @return struct POINT3D The rotated point
-//  */
-// struct POINT3D rotate_point(struct POINT3D point, float psi, float theta, float phi) {
-//     struct POINT3D point_rotated;
-//     point_rotated.x = cos(theta) * point.x + sin(theta) * sin(psi) * point.y + sin(theta) * cos(psi) * point.z;
-//     point_rotated.y = sin(theta) * sin(phi) * point.x + (cos(psi) * cos(phi) - cos(theta) * sin(psi) * sin(phi)) * point.y + (-cos(phi)*sin(psi) - cos(theta)*cos(psi)*cos(phi)) * point.z;
-//     point_rotated.z = -sin(theta) * cos(phi) * point.x + (cos(psi) * sin(phi) + cos(theta) * cos(phi) * sin(psi)) * point.y + (-sin(psi) * sin(phi) + cos(theta) * cos(psi) * cos(phi)) * point.z;
-    
-//     return point_rotated;
-// }
+    if (y >= 0 && y < screen_height && x >= 0 && x < screen_width) {
+        if (z_val > z_buffer[y][x]) {
 
-// Rotation with Euler matrices happens in three steps. Z rotation (twist) (psi), then Y rotation (lean) (theta), then Z rotation (swing) (phi).
-/**
- * @brief will rotate the cube with a 3d rotational matrix
- * 
- * @param point The point to rotate
- * @param psi The angle to rotate around the z axis (twist)
- * @param theta The angle to rotate around the y axis (lean)
- * @param phi The angle to rotate around the z axis (swing)
- * @return struct POINT3D The rotated point
- */
-struct POINT3D rotate_point(struct POINT3D point, float psi, float theta, float phi) {
-    struct POINT3D point_rotated;
-    point_rotated.x = cos(theta) * point.x + 
-    sin(theta) * sin(psi) * point.y + 
-    sin(theta) * cos(psi) * point.z;
+            z_buffer[y][x] = z_val;
+            screen_buffer[y][x] = c;
+        }
+    }
+}
 
-    point_rotated.y = sin(theta) * sin(phi) * point.x + 
-    (cos(psi) * cos(phi) - cos(theta) * sin(psi) * sin(phi)) * point.y + 
-    (-cos(phi)*sin(psi) - cos(theta)*cos(psi)*sin(phi)) * point.z;
+void clear_zbuffer() {
+    memset(z_buffer, 0, screen_width * screen_height * sizeof(float)); // Won't ever draw negative points
+}
+// ---------------------------------------- Works fine ----------------------------------------
 
-    point_rotated.z = -sin(theta) * cos(phi) * point.x + 
-    (cos(psi) * sin(phi) + cos(theta) * cos(phi) * sin(psi)) * point.y + 
-    (-sin(psi) * sin(phi) + cos(theta) * cos(psi) * cos(phi)) * point.z;
-    
-    return point_rotated;
+
+
+
+
+// def get_x(x, y, z, roll, pitch, yaw):
+//     return cos(pitch) * cos(yaw) * x  +  (-sin(pitch) * cos(roll) + cos(pitch) * sin(yaw) * sin(roll)) * y  +  (-sin(pitch) * -sin(roll) + cos(pitch) * sin(yaw) * cos(roll)) * z
+// def get_y(x, y, z, roll, pitch, yaw):
+//     return sin(pitch) * cos(yaw) * x  +  (cos(pitch) * cos(roll) + sin(pitch) * sin(yaw) * sin(roll)) * y  +  (cos(pitch) * -sin(roll) + sin(pitch) * sin(yaw) * cos(roll)) * z
+// def get_z(x, y, z, roll, pitch, yaw):
+//     return -sin(yaw) * x  +  (cos(yaw) * sin(roll)) * y  +  (cos(yaw) * cos(roll)) * z
+
+float get_x(float x, float y, float z, float roll, float pitch, float yaw) {
+    return cos(pitch) * cos(yaw) * x  +  (-sin(pitch) * cos(roll) + cos(pitch) * sin(yaw) * sin(roll)) * y  +  (-sin(pitch) * -sin(roll) + cos(pitch) * sin(yaw) * cos(roll)) * z;
+}
+float get_y(float x, float y, float z, float roll, float pitch, float yaw) {
+    return sin(pitch) * cos(yaw) * x  +  (cos(pitch) * cos(roll) + sin(pitch) * sin(yaw) * sin(roll)) * y  +  (cos(pitch) * -sin(roll) + sin(pitch) * sin(yaw) * cos(roll)) * z;
+}
+float get_z(float x, float y, float z, float roll, float pitch, float yaw) {
+    return -sin(yaw) * x  +  (cos(yaw) * sin(roll)) * y  +  (cos(yaw) * cos(roll)) * z;
+}
+
+void place_cube_in_z_buffer_rotation(float center_x, float center_y, float center_z, float width, float roll, float pitch, float yaw) {
+    float x, y, z;
+    for (float i = -width; i < width; i+=.5) {
+        for (float j = -width; j < width; j+=.5) {
+        //     perms = ((_x, _y, depth, rb.Color.blue.lighter(10)), 
+        //     (_x, _y, -depth, rb.Color.blue.darker(10)), 
+        //     (_x, depth, _y, rb.Color.red.lighter(10)), 
+        //     (_x, -depth, _y, rb.Color.red.darker(10)), 
+        //     (depth, _x, _y, rb.Color.green.lighter(10)), 
+        //     (-depth, _x, _y, rb.Color.green.darker(10)))
+            // Front face
+            x = get_x(i, j, width, roll, pitch, yaw);
+            y = get_y(i, j, width, roll, pitch, yaw);
+            z = get_z(i, j, width, roll, pitch, yaw);
+            final_zbuffer_logic('F', z + center_z, center_x + x, center_y + y);
+
+            // Back face
+            x = get_x(i, j, -width, roll, pitch, yaw);
+            y = get_y(i, j, -width, roll, pitch, yaw);
+            z = get_z(i, j, -width, roll, pitch, yaw);
+            final_zbuffer_logic('B', z + center_z, center_x + x, center_y + y);
+
+            // Left face
+            x = get_x(-width, i, j, roll, pitch, yaw);
+            y = get_y(-width, i, j, roll, pitch, yaw);
+            z = get_z(-width, i, j, roll, pitch, yaw);
+            final_zbuffer_logic('L', z + center_z, center_x + x, center_y + y);
+
+            // Right face
+            x = get_x(width, i, j, roll, pitch, yaw);
+            y = get_y(width, i, j, roll, pitch, yaw);
+            z = get_z(width, i, j, roll, pitch, yaw);
+            final_zbuffer_logic('R', z + center_z, center_x + x, center_y + y);
+
+            // Top face
+            x = get_x(i, width, j, roll, pitch, yaw);
+            y = get_y(i, width, j, roll, pitch, yaw);
+            z = get_z(i, width, j, roll, pitch, yaw);
+            final_zbuffer_logic('T', z + center_z, center_x + x, center_y + y);
+
+            // Bottom face
+            x = get_x(i, -width, j, roll, pitch, yaw);
+            y = get_y(i, -width, j, roll, pitch, yaw);
+            z = get_z(i, -width, j, roll, pitch, yaw);
+            final_zbuffer_logic('O', z + center_z, center_x + x, center_y + y);
+
+        }
+    }
 }
 
 int main() {
-    float psi = 0, theta = 0, phi = 0;
-    float increment = M_PI / 32 ;
-    struct POINT3D center = {20, 0, 0};
-    struct POINT3D testPoints[4] = {{0, 10, 0}, {-1, 10, 0}, {1, 10, 0}, {1, 9, 0}};
-    // clear_zbuffer();
+    float roll = 0, pitch = 0, yaw = 0;
+    float increment = M_PI / 180 * 3;
+    int theta_mul = 1;
+    float width = 10;
+    clear_zbuffer();
+    
 
-    // rotate psi, then theta, then phi
     while (1) {
         // calculate cube
         set_buffer_background('.');
+        clear_zbuffer();
+        place_cube_in_z_buffer_rotation(60, 15, 20, width, roll, pitch, yaw);
 
-        // draw points to screen
-        for (int i = 0; i < 4; i++) {
-            struct POINT3D point = rotate_point(testPoints[i], psi, theta, phi);
-            point.x += center.x;
-            screen_buffer[point.y][point.x] = 'X';
-        }
-
-        screen_buffer[center.y][center.x] = 'O';
-
-        // place_cube_in_z_buffer_rotation(center, 10, psi, theta, phi);
 
         // draw cube
         clear_screen();
@@ -120,10 +157,10 @@ int main() {
         draw_buffer();
 
         // sleep
-        psi += increment;
-        // theta += increment * 2;
-        // phi += increment * 3;
-        Sleep(200);
+        pitch += increment;
+        yaw += increment * 3;
+        roll += increment * 2;
+        Sleep(50);
 
     }
 }
