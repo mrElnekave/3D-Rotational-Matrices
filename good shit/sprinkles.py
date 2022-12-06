@@ -38,15 +38,17 @@ shape_donut: list[tuple[tuple[float, float, float], rb.Color]] = []
 # calculates the points on a donut with no rotation centered on the origin
 for v in range(0, angle_of_tube, 3):  # goes around the tube interval of 3 if you want it to be w/out holes
     color = None
-    if 0 <= v <= 180:
+    if 70 <= v <= 110:
+        color = rb.Color.mix(coloring["random_burnt"], coloring["bottom"], math.fabs(90 - v) / 20, "linear")
+    elif 0 <= v <= 180:
         color = coloring["bottom"]
     else:
         color = coloring["glaze"]
 
     for u in range(0, angle_of_donut, 2):  # goes around the torus
-        if color == coloring["bottom"] and random.randint(0, 100) < 5:
-            _color = coloring["random_burnt"]
-        elif color == coloring["glaze"] and random.randint(0, 100) < 5:
+        # if color == coloring["bottom"] and random.randint(0, 100) < 5:
+        #     _color = coloring["random_burnt"]
+        if color == coloring["glaze"] and random.randint(0, 100) < 5:
             _color = random.choice(sprinkles)
         else:
             _color = color

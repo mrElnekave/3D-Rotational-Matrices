@@ -9,15 +9,16 @@ rb.Game.show_fps = True
 
 import cube, donut, sprinkles
 
+granularity = 2
 
 def custom_update():
-    donut.roll += 0.0704
-    donut.pitch += 0.0352
-    cube.roll += 0.0704
-    cube.pitch += 0.0352
-    cube.yaw += 0.0176
-    sprinkles.roll_donut += 0.0704
-    sprinkles.pitch_donut += 0.0352
+    donut.roll += 0.0704 * granularity
+    donut.pitch += 0.0352 * granularity
+    cube.roll += 0.0704 * granularity
+    cube.pitch += 0.0352 * granularity
+    cube.yaw += 0.0176 * granularity
+    sprinkles.roll_donut += 0.0704 * granularity
+    sprinkles.pitch_donut += 0.0352 * granularity
     # Updates the roll and yaw in radians
 
 
