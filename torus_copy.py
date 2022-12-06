@@ -2,8 +2,22 @@ import rubato as rb
 from rubato import Vector
 from rubato import Color
 from rotation_kachow import get_xyz
+
+
+# rotation
 from math import cos, sin, pi
 
+
+def get_x(x, y, z, roll, pitch, yaw):
+    return cos(pitch) * cos(yaw) * x  +  (-sin(pitch) * cos(roll) + cos(pitch) * sin(yaw) * sin(roll)) * y  +  (-sin(pitch) * -sin(roll) + cos(pitch) * sin(yaw) * cos(roll)) * z
+def get_y(x, y, z, roll, pitch, yaw):
+    return sin(pitch) * cos(yaw) * x  +  (cos(pitch) * cos(roll) + sin(pitch) * sin(yaw) * sin(roll)) * y  +  (cos(pitch) * -sin(roll) + sin(pitch) * sin(yaw) * cos(roll)) * z
+def get_z(x, y, z, roll, pitch, yaw):
+    return -sin(yaw) * x  +  (cos(yaw) * sin(roll)) * y  +  (cos(yaw) * cos(roll)) * z
+
+def get_xyz(x, y, z, roll, pitch, yaw):
+    return get_x(x, y, z, roll, pitch, yaw), get_y(x, y, z, roll, pitch, yaw), get_z(x, y, z, roll, pitch, yaw)
+# rotation
 
 # target 54 * 54
 a = 10 # a is the radius of the tube
@@ -35,7 +49,7 @@ yaw = 0 # spin around y-axis counter-clockwise rotation (on screen it looks like
 
 # define rotation functions
 
-quarter_torus = []
+half_torus = []
 
 def gen_torus():
     for v in range(0, 360, 4):  # goes around the tube interval of 3 if you want it to be w/out holes
@@ -45,7 +59,7 @@ def gen_torus():
             x = (c + a * cos(v_)) * cos(u_)
             y = (c + a * cos(v_)) * sin(u_)
             z = a * sin(v_)
-            quarter_torus.append((x, y, z))
+            half_torus.append((x, y, z))
 gen_torus()
 
 surf = SurfaceZ((a + c) * 2, (a + c) * 2, (10, 10))
@@ -57,7 +71,7 @@ def custom_draw():
     surf.reset_zbuffer()
     surf.fill(rb.Color.night)
 
-    for point in quarter_torus:
+    for point in half_torus:
         x, y, z = get_xyz(*point, roll, pitch, yaw)
         _x, _y, _z = int(x), int(y), int(z)
         color = rb.Color.mix(rb.Color.yellow, rb.Color.red, rb.Math.map(_z, -a-c, a+c, 0, 1), "linear")
@@ -70,6 +84,7 @@ def custom_draw():
             
     rb.Draw.surface(surf)
 
+rb.Game.show_fps = True
 
 # def custom_update():
 #     global roll, pitch, yaw

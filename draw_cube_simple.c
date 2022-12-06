@@ -7,7 +7,7 @@
 // My terminal width is 160 characters
 // and I want 50 characters of height
 
-#define TERMINAL_WIDTH 159
+#define TERMINAL_WIDTH 156
 #define TERMINAL_HEIGHT 30
 
 char screen_buffer[TERMINAL_HEIGHT][TERMINAL_WIDTH];
