@@ -6,7 +6,7 @@ rb.init(res=(300, 300), maximize=True)
 # define cube vertices
 width = 40
 height = 40
-depth = 50
+depth = 40
 
 center = rb.Vector(0, 0)
 
