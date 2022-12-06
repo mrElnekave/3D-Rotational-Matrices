@@ -38,7 +38,7 @@ def donut_surf():
 
     # rotates the points centered on the origin, then draws them
     for point in shape:
-        x, y, z = rotate_pt(*point, roll, pitch, 0) # yaw is 0 because we don't want to rotate wiggle the donut
+        x, y, z = rotate_pt(*point, roll, pitch, yaw)
         if z_buffer[x + dims[0] * y] < z:
             z_buffer[x + dims[0] * y] = z
             color = rb.Color.mix(
