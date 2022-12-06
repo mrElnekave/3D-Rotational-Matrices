@@ -1,5 +1,5 @@
 import rubato as rb
-from rotation_kachow import get_xyz
+from big_demo.point_rotator import rotate_pt
 rb.init(res=(300, 300), maximize=True)
 
 
@@ -30,7 +30,7 @@ def custom_draw():
             (-depth, _x, _y, rb.Color.green.darker(10)))
             for perm in perms:
                 orientation, color = perm[:-1], perm[-1]
-                x, y, z = get_xyz(*orientation, roll, pitch, yaw)
+                x, y, z = rotate_pt(*orientation, roll, pitch, yaw)
                 rb.Draw.queue_rect(rb.Vector(x, y), 3, 3, fill=color, z_index=int(z), border=None)
 
 

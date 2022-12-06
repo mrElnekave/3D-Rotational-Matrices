@@ -22,7 +22,7 @@ deg_to_rad = math.pi / 180
 coloring = {
     "bottom": rb.Color.from_hex("#dd8331"), 
     "glaze": rb.Color.from_hex("#fa8596"), 
-    "random_burnt": rb.Color.from_hex("#63200d")
+    "burnt": rb.Color.from_hex("#63200d")
 }
 
 sprinkles = [
@@ -39,15 +39,13 @@ shape_donut: list[tuple[tuple[float, float, float], rb.Color]] = []
 for v in range(0, angle_of_tube, 3):  # goes around the tube interval of 3 if you want it to be w/out holes
     color = None
     if 70 <= v <= 110:
-        color = rb.Color.mix(coloring["random_burnt"], coloring["bottom"], math.fabs(90 - v) / 20, "linear")
+        color = rb.Color.mix(coloring["burnt"], coloring["bottom"], math.fabs(90 - v) / 20, "linear")
     elif 0 <= v <= 180:
         color = coloring["bottom"]
     else:
         color = coloring["glaze"]
 
     for u in range(0, angle_of_donut, 2):  # goes around the torus
-        # if color == coloring["bottom"] and random.randint(0, 100) < 5:
-        #     _color = coloring["random_burnt"]
         if color == coloring["glaze"] and random.randint(0, 100) < 5:
             _color = random.choice(sprinkles)
         else:

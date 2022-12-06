@@ -3,7 +3,12 @@ Prototype mathematics in rubato
 """
 
 import rubato as rb
-import math
+import os.path
+import sys, math
+parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent)
+from point_rotator import rotate_pt
+
 
 thickness = 10  # a is the thickness of the donut
 radius = 15  # c is the radius of the donut
@@ -12,18 +17,6 @@ angle_of_donut = 360  # How much of the donut is visible (in degrees)
 
 rb.init(res=(500, 500), maximize=True, target_fps=60)
 rb.Game.show_fps = True
-
-
-def rotate_pt(x, y, z, roll, pitch, yaw):
-    cosp, sinp = math.cos(pitch), math.sin(pitch)
-    cosy, siny = math.cos(yaw), math.sin(yaw)
-    cosr, sinr = math.cos(roll), math.sin(roll)
-
-    rx = cosp * cosy * x + (cosp * siny * sinr - sinp * cosr) * y + (sinp * sinr + cosp * siny * cosr) * z
-    ry = sinp * cosy * x + (cosp * cosr + sinp * siny * sinr) * y + (sinp * siny * cosr - cosp * sinr) * z
-    rz = (cosy * sinr) * y + (cosy * cosr) * z - siny * x
-
-    return int(rx), int(ry), int(rz)
 
 
 roll_donut = 0  # spin around x-axis counter-clockwise (on screen its another up-down motion)

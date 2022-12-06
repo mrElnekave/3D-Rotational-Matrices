@@ -1,6 +1,10 @@
 import rubato as rb
-from rotation_kachow import get_xyz
 from copy import copy
+import os.path
+import sys
+parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent)
+from point_rotator import rotate_pt
 
 rb.init(res=(100, 100), window_size=(600, 600), name="Beautiful Gimbal Surface")
 
@@ -46,17 +50,17 @@ for point in circle_z_plane:
 points = [(0, 30, 0), (0, -30, 0), (30, 0, 0), (-30, 0, 0), (0, 0, 30), (0, 0, -30)]
 def draw_circle_z():
     for c_point in circle_z_plane:
-        x, y, z = get_xyz(*c_point, 0, pitch, 0)
+        x, y, z = rotate_pt(*c_point, 0, pitch, 0)
         pos = rb.Vector(x, y)
         rb.Draw.queue_pixel(pos, color=rb.Color.blue, z_index=int(z))
 def draw_circle_y():
     for c_point in circle_y_plane:
-        x, y, z = get_xyz(*c_point, 0, pitch, yaw)
+        x, y, z = rotate_pt(*c_point, 0, pitch, yaw)
         pos = rb.Vector(x, y)
         rb.Draw.queue_pixel(pos, color=rb.Color.green, z_index=int(z))
 def draw_circle_x():
     for c_point in circle_y_plane:
-        x, y, z = get_xyz(*c_point, roll, pitch, yaw)
+        x, y, z = rotate_pt(*c_point, roll, pitch, yaw)
         pos = rb.Vector(x, y)
         rb.Draw.queue_pixel(pos, color=rb.Color.red, z_index=int(z))
 
@@ -73,7 +77,7 @@ def custom_draw():
     draw_circle_x()
     for point in points:
         rb.Draw.queue_circle((0, 0), radius=2, border=None, fill=rb.Color(0, 0, 255), z_index=0)
-        x, y, z = get_xyz(*point, roll, pitch, yaw)
+        x, y, z = rotate_pt(*point, roll, pitch, yaw)
         color = rb.Color.black.lighter(int(rb.Math.map(z, -30, 30, 10, 250)))
         rb.Draw.queue_circle((x, y), fill=color, z_index=int(z))
 

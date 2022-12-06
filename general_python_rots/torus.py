@@ -1,6 +1,11 @@
 import rubato as rb
-from rotation_kachow import get_xyz
 from math import cos, sin, pi
+import os.path
+import sys
+parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent)
+from point_rotator import rotate_pt
+
 rb.init(res=(300, 300), maximize=True)
 
 
@@ -36,7 +41,7 @@ def gen_torus():
 gen_torus()
 def custom_draw():  
     for point in torus:
-        x, y, z = get_xyz(*point, roll, pitch, yaw)
+        x, y, z = rotate_pt(*point, roll, pitch, yaw)
         rb.Draw.queue_rect(rb.Vector(x, y), 6, 6, fill=rb.Color.blue, z_index=int(z), border=None)
 
 
