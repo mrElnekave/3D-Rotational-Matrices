@@ -1,9 +1,5 @@
 import rubato as rb
 from math import cos, sin, pi
-import os.path
-import sys
-parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parent)
 from point_rotator import rotate_pt
 
 rb.init(res=(300, 300), maximize=True)

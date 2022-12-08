@@ -3,10 +3,7 @@ Prototype mathematics in rubato
 """
 
 import rubato as rb
-import os.path
-import sys, math
-parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parent)
+import math
 from point_rotator import rotate_pt
 
 

@@ -5,10 +5,6 @@ Prototype mathematics in rubato
 import rubato as rb
 import math
 import random
-import os.path
-import sys
-parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parent)
 from point_rotator import rotate_pt
 
 thickness = 10  # a is the thickness of the donut
