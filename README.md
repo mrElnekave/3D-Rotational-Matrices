@@ -11,3 +11,6 @@ Creating projects for Math 2B
 > all the original C commandline code.
 
 If you want to see how it was done, check these [slides](https://docs.google.com/presentation/d/1S6Tq5zvRbTNgvMFwpLw_Dwiy8rMKnze3SVTjfmKySYc/edit?usp=sharing)
+
+
+NEXT UP: In the gimbal tutorial give a specific colour to every ball.
