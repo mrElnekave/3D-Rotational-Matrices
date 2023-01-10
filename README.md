@@ -14,3 +14,5 @@ If you want to see how it was done, check these [slides](https://docs.google.com
 
 
 NEXT UP: In the gimbal tutorial give a specific colour to every ball.
+
+And YouTube [video](https://youtu.be/S26etodkbBY).
