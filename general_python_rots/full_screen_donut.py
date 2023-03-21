@@ -6,13 +6,13 @@ import rubato as rb
 import math
 from point_rotator import rotate_pt
 
-
-thickness = 10  # a is the thickness of the donut
-radius = 15  # c is the radius of the donut
+mul = 2
+thickness = 10 * mul  # a is the thickness of the donut
+radius = 15 * mul  # c is the radius of the donut
 angle_of_tube = 360  # How much of the tube is visible (in degrees)
-angle_of_donut = 360  # How much of the donut is visible (in degrees)
+angle_of_donut = 90  # How much of the donut is visible (in degrees)
 
-rb.init(res=(500, 500), maximize=True, target_fps=60)
+rb.init(res=(500 * mul, 500 * mul), maximize=True, target_fps=60)
 rb.Game.show_fps = True
 
 
@@ -25,8 +25,8 @@ deg_to_rad = math.pi / 180
 shape_donut: list[tuple[float, float, float]] = []
 
 # calculates the points on a donut with no rotation centered on the origin
-for v in range(0, angle_of_tube, 3):  # goes around the tube interval of 3 if you want it to be w/out holes
-    for u in range(0, angle_of_donut, 2):  # goes around the torus
+for v in range(0, angle_of_tube, 1):  # goes around the tube interval of 3 if you want it to be w/out holes
+    for u in range(0, angle_of_donut, 1):  # goes around the torus
         v_ = v * deg_to_rad
         u_ = u * deg_to_rad
         x = (radius + thickness * math.cos(v_)) * math.cos(u_)

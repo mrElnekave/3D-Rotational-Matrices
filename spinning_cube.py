@@ -22,12 +22,13 @@ scene = rb.Scene()
 def custom_draw():  
     for _x in range(-width, width, 10):
         for _y in range(-height, height, 10):
-            perms = ((_x, _y, depth, rb.Color.blue.lighter(10)), 
-            (_x, _y, -depth, rb.Color.blue.darker(10)), 
-            (_x, depth, _y, rb.Color.red.lighter(10)), 
-            (_x, -depth, _y, rb.Color.red.darker(10)), 
-            (depth, _x, _y, rb.Color.green.lighter(10)), 
-            (-depth, _x, _y, rb.Color.green.darker(10)))
+            amt = 20
+            perms = ((_x, _y, depth, rb.Color.blue.lighter(amt)), 
+            (_x, _y, -depth, rb.Color.blue.darker(amt)), 
+            (_x, depth, _y, rb.Color.red.lighter(amt)), 
+            (_x, -depth, _y, rb.Color.red.darker(amt)), 
+            (depth, _x, _y, rb.Color.green.lighter(amt)), 
+            (-depth, _x, _y, rb.Color.green.darker(amt)))
             for perm in perms:
                 orientation, color = perm[:-1], perm[-1]
                 x, y, z = rotate_pt(*orientation, roll, pitch, yaw)

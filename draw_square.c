@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <Windows.h>
+#define _USE_MATH_DEFINES // This is required to get M_PI
 #include <math.h>
-#include <corecrt_math_defines.h> // for M_PI
 
 
 
@@ -104,6 +104,7 @@ int main() {
         place_cube_in_buffer_rotation(50, 15, 10, 10, '#', angle);
 
         // draw cube
+        set_cursor_top();
         clear_screen();
         set_cursor_top();
         draw_buffer();

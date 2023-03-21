@@ -152,6 +152,7 @@ int main() {
 
 
         // draw cube
+        set_cursor_top();
         clear_screen();
         set_cursor_top();
         draw_buffer();
