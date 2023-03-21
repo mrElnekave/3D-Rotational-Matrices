@@ -1,7 +1,7 @@
 # 3D-Rotational-Matrices
 
 This is my project for Mathematical Models in Linear Algebra, where I explore the use of 3D Matrices using my library, rubato.
-Further explanation [here](/#Description)
+Further explanation [here](/README.md#Description)
 
 ![Demo Gif](Usage-Demo/donut.gif)
 
