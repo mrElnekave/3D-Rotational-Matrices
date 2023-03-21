@@ -1,6 +1,7 @@
-# Math 2B
+# 3D-Rotational-Matrices
 
-Creating projects for Math 2B
+This is my project for Mathematical Models in Linear Algebra, where I explore the use of 3D Matrices using my library, rubato.
+Further explanation [here](/#Description)
 
 ![Demo Gif](Usage-Demo/donut.gif)
 
@@ -25,6 +26,8 @@ Creating projects for Math 2B
 ## base
 
 > all the original C commandline code.
+
+## Description
 
 If you want to see how it was done, check these [slides](https://docs.google.com/presentation/d/1S6Tq5zvRbTNgvMFwpLw_Dwiy8rMKnze3SVTjfmKySYc/edit?usp=sharing)
 
