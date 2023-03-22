@@ -1,7 +1,7 @@
 # 3D-Rotational-Matrices
 
 This is my project for Mathematical Models in Linear Algebra, where I explore the use of 3D Matrices using my library, rubato.
-Further explanation [here](/README.md#Description)
+Further explanation [here](/README.md#Description).
 
 ![Demo Gif](Usage-Demo/donut.gif)
 
@@ -37,6 +37,8 @@ __If you want to see how it was done:__
 
  
 Improvements:
+* Repl.it demo.
+* Linux C support
 * Enhance the gimbal tutorial, adding colors to the different axes zero markers.
 * Use matrix multiplication and possibly create a shader for the GPU, instead of pixel by pixel computation.
-* Repl.it demo.
+
