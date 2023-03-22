@@ -5,6 +5,8 @@ Further explanation [here](/README.md#Description)
 
 ![Demo Gif](Usage-Demo/donut.gif)
 
+__To try it yourself, you can download and run the numerous exes or build it [yourself](/README.md#Installation), or go to [repl.it]() and run the big demo online.__
+
 ## Installation
 
 1. Make a virtual environment \*If you want to:
@@ -21,16 +23,20 @@ Further explanation [here](/README.md#Description)
 
 ## general_python_rots
 
-> Showcases how I came up w/ the algorithm as well as basic rotations and full control with WASD EQ of roll, pitch, yaw.
+> Showcases how I came up w/ the algorithm as well as basic rotations and full control with WASD EQ of roll, pitch, yaw (in the gimbal_tutorial).
 
-## base
+## C-rot
 
-> all the original C commandline code.
+> all the original C commandline code. (Original project).
 
 ## Description
 
-If you want to see how it was done, check these [slides](https://docs.google.com/presentation/d/1S6Tq5zvRbTNgvMFwpLw_Dwiy8rMKnze3SVTjfmKySYc/edit?usp=sharing)
+__If you want to see how it was done:__ 
+* check these [slides](https://docs.google.com/presentation/d/1S6Tq5zvRbTNgvMFwpLw_Dwiy8rMKnze3SVTjfmKySYc/edit?usp=sharing) describing rotational matrices and gimbal locks.
+* Or this YouTube [video](https://youtu.be/S26etodkbBY) on all the different elements and design process of this project.
 
-NEXT UP: In the gimbal tutorial give a specific colour to every ball.
-
-And YouTube [video](https://youtu.be/S26etodkbBY).
+ 
+Improvements:
+* Enhance the gimbal tutorial, adding colors to the different axes zero markers.
+* Use matrix multiplication and possibly create a shader for the GPU, instead of pixel by pixel computation.
+* Repl.it demo.
