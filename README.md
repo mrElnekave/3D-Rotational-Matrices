@@ -7,6 +7,7 @@
 This is my project for Mathematical Models in Linear Algebra, where I explore the use of 3D Matrices using my library, rubato. The project comprises a gimbal locking demo that explains the phenomenon, alongside slides and a video detailing the mathematical processes involved in the project's implementation.
 
 [_SKIP TO THE INSTALLATION GUIDE_](#installation)
+
 [_SKIP TO ACCOMPANYING SLIDES AND VIDEO_](#accompanying-slides-and-video)
 
 ## Background
@@ -23,7 +24,7 @@ The project features two objects: a cube and a donut. The cube was created using
 
 The rotational matrices formed the foundation of the project's ability to spin the cube and donut around different axes. The process involved the calculation of a transformation matrix for each rotation and applying the transformation to the object's vertices. The transformed vertices were then rendered to display the rotated object.
 
-Check it out [here](./src/python-rot/general_python_rots/get_rot_matrices.py)!
+Check out [how they were made](./src/python-rot/general_python_rots/get_rot_matrices.py) and [how they are used](./src//python-rot//general_python_rots/point_rotator.py)!
 
 ## Gimbal Locking Demo
 
