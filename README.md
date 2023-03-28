@@ -1,11 +1,45 @@
-# 3D-Rotational-Matrices
+# Rotational Matrix Project
 
-This is my project for Mathematical Models in Linear Algebra, where I explore the use of 3D Matrices using my library, rubato.
-Further explanation [here](/README.md#Description).
+<p align="center">
+  <img src="./Usage-Demo/donut.gif"  width="60%" height="60%">
+</p>
 
-![Demo Gif](Usage-Demo/donut.gif)
+This is my project for Mathematical Models in Linear Algebra, where I explore the use of 3D Matrices using my library, rubato. The project comprises a gimbal locking demo that explains the phenomenon, alongside slides and a video detailing the mathematical processes involved in the project's implementation.
 
-__To try it yourself, you can download and run the numerous exes or build it [yourself](/README.md#Installation), or go to [repl.it]() and run the big demo online.__
+[_SKIP TO THE INSTALLATION GUIDE_](#installation)
+[_SKIP TO ACCOMPANYING SLIDES AND VIDEO_](#accompanying-slides-and-video)
+
+## Background
+
+Rotational matrices are mathematical constructs that describe the rotation of objects in three-dimensional space. They can be used to define the orientation of an object and to rotate an object about a specific axis.
+
+## The Cube and Donut
+
+The project features two objects: a cube and a donut. The cube was created using 3D modeling software, while the donut was generated using Matlab. The objects were then exported in a format compatible with the programming language used in the project.
+
+![Run](Usage-Demo/runner.gif)
+
+## Rotational Matrices
+
+The rotational matrices formed the foundation of the project's ability to spin the cube and donut around different axes. The process involved the calculation of a transformation matrix for each rotation and applying the transformation to the object's vertices. The transformed vertices were then rendered to display the rotated object.
+
+Check it out [here](./src/python-rot/general_python_rots/get_rot_matrices.py)!
+
+## Gimbal Locking Demo
+
+The project includes a demo that explains the phenomenon of gimbal locking. Gimbal locking is the loss of one degree of freedom in rotation that occurs when the rotational axes of an object align. The demo uses a straightforward example to illustrate the occurrence of gimbal locking and demonstrates how quaternions can help to avoid it.
+
+Try it out [here](./src/python-rot/general_python_rots/gimbal_tutorial.py)!
+
+## Accompanying Slides and Video
+
+These [slides](https://docs.google.com/presentation/d/1S6Tq5zvRbTNgvMFwpLw_Dwiy8rMKnze3SVTjfmKySYc/edit?usp=sharing) describe the mathematical processes involved in the project's implementation.
+
+This YouTube [video](https://youtu.be/S26etodkbBY) provides a walkthrough of the project's features and thoughts on the project's implementation.
+
+## Conclusion
+
+The Rotational Matrix Project showcases the use of rotational matrices in manipulating objects in three-dimensional space, including a cube and donut. The gimbal locking demo and accompanying slides and video provide a thorough exposition of the mathematical processes involved in the project. The project has potential applications in areas such as game development, computer graphics, and robotics.
 
 ## Installation
 
@@ -15,30 +49,9 @@ __To try it yourself, you can download and run the numerous exes or build it [yo
 2. You must install rubato:
    ![Rubato](Usage-Demo/install_rubato.gif)
 
-## big_demo
-
-> Holds a runner.py file which showcases the 3 main creations.
-
-![Run](Usage-Demo/runner.gif)
-
-## general_python_rots
-
-> Showcases how I came up w/ the algorithm as well as basic rotations and full control with WASD EQ of roll, pitch, yaw (in the gimbal_tutorial).
-
-## C-rot
-
-> all the original C commandline code. (Original project).
-
-## Description
-
-__If you want to see how it was done:__ 
-* check these [slides](https://docs.google.com/presentation/d/1S6Tq5zvRbTNgvMFwpLw_Dwiy8rMKnze3SVTjfmKySYc/edit?usp=sharing) describing rotational matrices and gimbal locks.
-* Or this YouTube [video](https://youtu.be/S26etodkbBY) on all the different elements and design process of this project.
-
- 
 Improvements:
-* Repl.it demo.
-* Linux C support
-* Enhance the gimbal tutorial, adding colors to the different axes zero markers.
-* Use matrix multiplication and possibly create a shader for the GPU, instead of pixel by pixel computation.
 
+- Repl.it demo.
+- Linux C support
+- Enhance the gimbal tutorial, adding colors to the different axes zero markers.
+- Use matrix multiplication and possibly create a shader for the GPU, instead of pixel by pixel computation.
